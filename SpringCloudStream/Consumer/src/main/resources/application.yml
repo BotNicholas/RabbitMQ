@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: Consumer
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /
+    username: root
+    password: password
+  cloud:
+    stream:
+      bindings:
+        myInput-in-0: # Won't work without this "-in-0"!!!
+          group: demo-queue
+          content-type: application/json
+      rabbit:
+        bindings:
+          myInput-in-0:
+            consumer:
+              queue-name-group-only: true
+              exchangeType: direct           # because your demo-exchange is type 'direct'
+              bindingRoutingKey: demo-queue  # this key will be used to bind the queue

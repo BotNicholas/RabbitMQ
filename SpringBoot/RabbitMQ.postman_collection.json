@@ -1,0 +1,51 @@
+{
+	"info": {
+		"_postman_id": "9c2eba8b-86cb-414c-9c8a-14d5d167d174",
+		"name": "RabbitMQ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31306025"
+	},
+	"item": [
+		{
+			"name": "SendMessage",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"typeName\": \"PNG\",\r\n    \"fileType\": \"IMAGE_PNG\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/send/messages?message=\"AAAA\"",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"send",
+						"messages"
+					],
+					"query": [
+						{
+							"key": "message",
+							"value": "\"AAAA\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send NEW message",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

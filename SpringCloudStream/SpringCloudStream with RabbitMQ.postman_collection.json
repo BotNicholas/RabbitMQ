@@ -1,0 +1,30 @@
+{
+	"info": {
+		"_postman_id": "fdaa9c46-ed1a-48ce-bc9b-6f44af52401f",
+		"name": "SpringCloudStream with RabbitMQ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31306025"
+	},
+	"item": [
+		{
+			"name": "SendMessage",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/messages/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"messages",
+						"send"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
