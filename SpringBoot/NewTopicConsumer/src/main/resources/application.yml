@@ -8,6 +8,9 @@ spring:
     virtual-host: /
     username: root
     password: password
+#    listener:
+#      simple:
+#        acknowledge-mode: manual
 
 server:
   port: 8082

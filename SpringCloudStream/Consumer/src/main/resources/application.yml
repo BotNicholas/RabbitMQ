@@ -8,15 +8,95 @@ spring:
     username: root
     password: password
   cloud:
+    function:
+      definition: myInput;deadLetterListener
     stream:
       bindings:
         myInput-in-0: # Won't work without this "-in-0"!!!
+          destination: demo-exchange
           group: demo-queue
+          content-type: application/json
+          consumer:
+            max-attempts: 1 # default is 3. That means once exception is thrown don't retry
+        deadLetterListener-in-0:
+          destination: dead-letter-exchange
+          group: dead-letter-queue
           content-type: application/json
       rabbit:
         bindings:
+#          myInput-in-0:
+#            consumer:
+#              exchangeType: direct
+#              durableSubscription: true
+#              queueNameGroupOnly: true
+#              autoBindDlq: true
+#              deadLetterExchange: dead-letter-exchange
+#              deadLetterRoutingKey: dlq-key
+#              lazy: true
+## OR
           myInput-in-0:
             consumer:
+              declare-exchange: false
               queue-name-group-only: true
-              exchangeType: direct           # because your demo-exchange is type 'direct'
-              bindingRoutingKey: demo-queue  # this key will be used to bind the queue
+              bind-queue: false
+              republish-to-dlq: false
+          deadLetterListener-in-0:
+            consumer:
+              declare-exchange: false
+              queue-name-group-only: true
+              bind-queue: false
+
+
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# So you have two ways:
+#1) Describe it exactly the same as in definitions.json
+#2) Restrict Spring Clous Stream create Bindings and etc...
+#-------------------------------------------------------------
+
+
+
+# Example of configuration:
+#spring:
+#  config:
+#    activate:
+#      on-profile: local
+#
+#  cloud:
+#    function:
+#      definition: bankingConsentChannel;bankingConsentPublisher
+#
+#    stream:
+#      bindings:
+#        bankingConsentChannel-in-0:
+#          contentType: application/json
+#          destination: banking-account-access-consent-exchange
+#          group: banking-account-access-consent
+#          consumer:
+#            bindingRoutingKey: account.consent.event
+#
+#        bankingConsentPublisher-out-0:
+#          contentType: application/json
+#          destination: banking-account-access-consent-exchange
+#          producer:
+#            routingKeyExpression: '''account.consent.event'''
+#
+#      rabbit:
+#        bindings:
+#          bankingConsentChannel-in-0:
+#            consumer:
+#              exchangeType: direct
+#              durableSubscription: true
+#              queueNameGroupOnly: true
+#              autoBindDlq: true
+#              deadLetterExchange: banking-account-access-consent-dlx
+#              deadLetterRoutingKey: account.consent.event.dlq
+#              queue:
+#                durable: true
+#                autoDelete: false
+#
+#          bankingConsentPublisher-out-0:
+#            producer:
+#              exchangeType: direct
+#              exchangeDurable: true
+#              autoDelete: false

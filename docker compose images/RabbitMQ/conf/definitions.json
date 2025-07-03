@@ -1,16 +1,4 @@
 {
-  "queues": [
-    {
-      "name": "demo-queue",
-      "vhost": "/",
-      "durable": true,
-      "auto_delete": false,
-      "arguments": {
-        "x-queue-mode": "lazy",
-        "x-queue-type": "classic"
-      }
-    }
-  ],
   "exchanges": [
     {
       "name": "demo-exchange",
@@ -20,6 +8,38 @@
       "type": "direct",
       "internal": false,
       "arguments": {}
+    },
+    {
+      "name": "dead-letter-exchange",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "type": "direct",
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "demo-queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-mode": "lazy",
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "dead-letter-exchange",
+        "x-dead-letter-routing-key": "dlq-key"
+      }
+    },
+    {
+      "name": "dead-letter-queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
     }
   ],
   "bindings": [
@@ -28,6 +48,14 @@
       "destination": "demo-queue",
       "destination_type": "queue",
       "routing_key": "demo-queue",
+      "vhost": "/",
+      "arguments": {}
+    },
+    {
+      "source": "dead-letter-exchange",
+      "destination": "dead-letter-queue",
+      "destination_type": "queue",
+      "routing_key": "dlq-key",
       "vhost": "/",
       "arguments": {}
     }

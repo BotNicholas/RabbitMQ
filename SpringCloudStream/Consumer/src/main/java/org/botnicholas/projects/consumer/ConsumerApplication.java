@@ -13,6 +13,15 @@ public class ConsumerApplication {
     public Consumer<String> myInput() {
         return message -> {
             System.out.println("Received new message: " + message);
+            System.out.println("Throwing exception");
+            throw new RuntimeException("SOMETHING WENT WRONG");
+        };
+    }
+
+    @Bean
+    public Consumer<String> deadLetterListener() {
+        return message -> {
+            System.out.println("Received new message in DeadLetter queue: " + message);
         };
     }
 
